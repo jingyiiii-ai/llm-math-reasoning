@@ -6,7 +6,7 @@
 
 ## 项目简介
 
-本项目为本科毕业设计项目，主要研究大语言模型在数学应用题推理任务中的表现。项目围绕 Chain-of-Thought（CoT）推理与代码辅助推理展开，对不同训练策略进行了对比实验。
+本项目主要研究大语言模型在数学应用题推理任务中的表现。项目围绕 Chain-of-Thought（CoT）推理与代码辅助推理展开，对不同训练策略进行了对比实验。
 
 项目完整实现了：
 
@@ -36,22 +36,21 @@
 llm-math-reasoning/
 ├── README.md
 ├── requirements.txt
-├── configs/
-│   └── lora_sft.yaml
-├── data/
-│   ├── sample_raw.json
-│   └── sample_sft.json
+├── .gitignore
 ├── scripts/
-│   ├── clean_math_solver.py
-│   ├── convert_to_sft.py
-│   ├── train_lora.sh
-│   ├── eval_gsm8k.py
-│   └── eval_svamp.py
+│   ├── build_math_datasets.py
+│   ├── clean_full_codeonly_v2.py
+│   ├── ablated_check.py
+│   ├── full_check.py
+│   └── check_ablated_residue.py
 ├── results/
-│   ├── gsm8k_result_summary.json
-│   └── svamp_result_summary.json
-└── docs/
-    └── experiment_notes.md
+│   ├── clean_report.json
+│   ├── ablated_residue_report.json
+│   └── train_full_codeonly_v2.report.json
+└── data/
+    ├── sample_raw.json
+    ├── sample_full_sft.jsonl
+    └── sample_ablated_sft.jsonl
 ```
 
 ---
@@ -86,29 +85,29 @@ llm-math-reasoning/
 
 ## 运行流程
 
-### 1. 数据清洗
+### 1. 构建训练数据
 
 ```bash
-python scripts/clean_math_solver.py
+python scripts/build_math_datasets.py
 ```
 
-### 2. 构造 SFT 数据
+### 2. 清洗 Full v2 代码辅助数据
 
 ```bash
-python scripts/convert_to_sft.py
+python scripts/clean_full_codeonly_v2.py
 ```
 
-### 3. LoRA 微调
+### 3. 检查 Ablated 数据残留
 
 ```bash
-bash scripts/train_lora.sh
+python scripts/check_ablated_residue.py
 ```
 
-### 4. 模型评测
+### 4. 检查训练数据格式
 
 ```bash
-python scripts/eval_gsm8k.py
-python scripts/eval_svamp.py
+python scripts/full_check.py
+python scripts/ablated_check.py
 ```
 
 ---
@@ -125,7 +124,7 @@ python scripts/eval_svamp.py
 - 代码辅助推理在部分计算型题目中具有补充作用
 - 不同推理方式在不同题型上存在一定互补性
 
----
+
 
 ## 说明
 
